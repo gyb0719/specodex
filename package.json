@@ -1,6 +1,6 @@
 {
   "name": "specodex",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "SpecoDex CLI and templates for spec-driven development with Codex agents.",
   "type": "module",
   "bin": {
