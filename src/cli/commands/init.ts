@@ -39,6 +39,11 @@ export const initCommand: Command = {
 
     context.logger.info("초기화가 완료되었습니다.");
     context.logger.info("다음 단계: Codex에서 /constitution을 실행해 헌장을 로드하세요.");
+    if (!dryRun) {
+      context.logger.info(
+        "workspace에서 'bun install' 후 'bun run install:browsers'를 실행하는 것을 잊지 마세요.",
+      );
+    }
   },
 };
 

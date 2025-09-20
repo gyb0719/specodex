@@ -42,6 +42,8 @@ bun run build
 # 워크스페이스 초기화
 ./src/bin.ts init my-feature
 cd my-feature
+bun install
+bun run install:browsers
 
 # 1. 헌장 업데이트
 ../src/bin.ts constitution

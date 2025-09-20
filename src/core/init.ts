@@ -57,6 +57,8 @@ export async function scaffoldWorkspace(options: InitOptions): Promise<void> {
     options,
   );
 
+  await copyFile("templates/bootstrap/package.json", join(targetRoot, "package.json"), options);
+
   await copyFile(
     "templates/spec/feature-spec-template.md",
     join(targetRoot, "templates/spec/feature-spec-template.md"),
