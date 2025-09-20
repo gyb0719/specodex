@@ -1,7 +1,7 @@
 import { spawn } from "child_process";
 import { once } from "events";
-import type { Logger } from "../cli/types";
-import type { TaskDefinition } from "./types";
+import type { Logger } from "../cli/types.js";
+import type { TaskDefinition } from "./types.js";
 
 interface RunTaskOptions {
   tasks: TaskDefinition[];

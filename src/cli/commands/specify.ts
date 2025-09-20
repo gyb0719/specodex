@@ -1,6 +1,6 @@
 import { join } from "path";
-import type { Command } from "../types";
-import { prepareSpecification, updateSpecification } from "../../core/specification";
+import type { Command } from "../types.js";
+import { prepareSpecification, updateSpecification } from "../../core/specification.js";
 
 export const specifyCommand: Command = {
   name: "specify",

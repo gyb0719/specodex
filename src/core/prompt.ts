@@ -1,5 +1,5 @@
-import { readFile } from "./file-utils";
-import { packagePath } from "./paths";
+import { readFile } from "./file-utils.js";
+import { packagePath } from "./paths.js";
 
 export async function loadPrompt(relativePath: string): Promise<string> {
   return readFile(packagePath(relativePath));

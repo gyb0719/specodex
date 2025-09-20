@@ -1,6 +1,6 @@
 import { join } from "path";
-import { fileExists, readFile, writeFile } from "./file-utils";
-import { loadPrompt } from "./prompt";
+import { fileExists, readFile, writeFile } from "./file-utils.js";
+import { loadPrompt } from "./prompt.js";
 
 interface ConstitutionOptions {
   projectRoot: string;

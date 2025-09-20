@@ -1,7 +1,7 @@
 import { promises as fs } from "fs";
 import { resolve } from "path";
-import type { Command, Logger } from "../types";
-import { scaffoldWorkspace } from "../../core/init";
+import type { Command, Logger } from "../types.js";
+import { scaffoldWorkspace } from "../../core/init.js";
 
 export const initCommand: Command = {
   name: "init",

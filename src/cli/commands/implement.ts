@@ -1,5 +1,5 @@
-import type { Command } from "../types";
-import { runImplementation } from "../../core/implementation-runner";
+import type { Command } from "../types.js";
+import { runImplementation } from "../../core/implementation-runner.js";
 
 export const implementCommand: Command = {
   name: "implement",

@@ -1,7 +1,7 @@
 import { spawn } from "child_process";
 import { once } from "events";
 import { join } from "path";
-import type { Logger } from "../cli/types";
+import type { Logger } from "../cli/types.js";
 
 interface PlaywrightOptions {
   projectRoot: string;

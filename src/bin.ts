@@ -1,5 +1,5 @@
-#!/usr/bin/env bun
-import { buildCli } from "./cli/index";
+#!/usr/bin/env node
+import { buildCli } from "./cli/index.js";
 
 async function main() {
   const cli = buildCli();

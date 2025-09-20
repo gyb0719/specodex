@@ -1,7 +1,7 @@
 import { promises as fs } from "fs";
 import { isAbsolute, join } from "path";
 import YAML from "yaml";
-import type { LoadedTasks, TaskDefinition } from "./types";
+import type { LoadedTasks, TaskDefinition } from "./types.js";
 
 export async function loadTasks(projectRoot: string, tasksPath: string): Promise<LoadedTasks> {
   const resolvedPath = isAbsolute(tasksPath) ? tasksPath : join(projectRoot, tasksPath);

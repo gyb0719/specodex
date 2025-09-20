@@ -1,7 +1,7 @@
 import { promises as fs } from "fs";
 import { join } from "path";
-import type { Command } from "../types";
-import { prepareConstitution, updateConstitution } from "../../core/constitution";
+import type { Command } from "../types.js";
+import { prepareConstitution, updateConstitution } from "../../core/constitution.js";
 
 export const constitutionCommand: Command = {
   name: "constitution",

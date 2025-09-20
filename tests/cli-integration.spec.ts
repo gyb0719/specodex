@@ -6,11 +6,15 @@ import { spawnSync } from "child_process";
 import { fileURLToPath } from "url";
 
 const PROJECT_ROOT = fileURLToPath(new URL("..", import.meta.url));
-const CLI_ENTRY = join(PROJECT_ROOT, "src", "bin.ts");
-const BUN_BIN = process.env.BUN_BIN ?? "bun";
+const DIST_ENTRY = join(PROJECT_ROOT, "dist", "bin.js");
+const SOURCE_ENTRY = join(PROJECT_ROOT, "src", "bin.ts");
+const HAS_DIST_BUILD = existsSync(DIST_ENTRY);
+
+const CLI_ENTRY = HAS_DIST_BUILD ? DIST_ENTRY : SOURCE_ENTRY;
+const RUNTIME_BIN = HAS_DIST_BUILD ? process.execPath : (process.env.BUN_BIN ?? "bun");
 
 function runCli(args: string[], cwd = PROJECT_ROOT) {
-  const result = spawnSync(BUN_BIN, [CLI_ENTRY, ...args], {
+  const result = spawnSync(RUNTIME_BIN, [CLI_ENTRY, ...args], {
     cwd,
     encoding: "utf-8",
   });
@@ -22,9 +26,13 @@ function runCli(args: string[], cwd = PROJECT_ROOT) {
 
 describe("SpecoDex CLI", () => {
   beforeAll(() => {
-    const version = spawnSync(BUN_BIN, ["--version"], { encoding: "utf-8" });
-    if (version.status === 127) {
-      throw new Error("bun 바이너리를 찾을 수 없습니다. 테스트를 실행하기 전에 PATH를 확인하세요.");
+    if (!HAS_DIST_BUILD) {
+      const version = spawnSync(RUNTIME_BIN, ["--version"], { encoding: "utf-8" });
+      if (version.status === 127) {
+        throw new Error(
+          "bun 바이너리를 찾을 수 없습니다. 테스트를 실행하기 전에 PATH를 확인하세요.",
+        );
+      }
     }
   });
 

@@ -1,6 +1,6 @@
 import net from "net";
 import { once } from "events";
-import type { Logger } from "../cli/types";
+import type { Logger } from "../cli/types.js";
 
 export interface SocketServerOptions {
   host: string;
@@ -18,10 +18,16 @@ export interface SocketServerHandle {
   closed: Promise<void>;
 }
 
-export async function startSocketServer(
-  options: SocketServerOptions,
-): Promise<SocketServerHandle> {
-  const { host, port, message, durationMs, maxConnections, allowHalfOpen = false, logger } = options;
+export async function startSocketServer(options: SocketServerOptions): Promise<SocketServerHandle> {
+  const {
+    host,
+    port,
+    message,
+    durationMs,
+    maxConnections,
+    allowHalfOpen = false,
+    logger,
+  } = options;
 
   if (!Number.isInteger(port) || port < 0 || port > 65535) {
     throw new Error(`유효하지 않은 포트 값입니다: ${port}`);

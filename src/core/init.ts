@@ -1,7 +1,7 @@
 import { promises as fs } from "fs";
 import { dirname, join, relative } from "path";
-import type { Logger } from "../cli/types";
-import { packagePath } from "./paths";
+import type { Logger } from "../cli/types.js";
+import { packagePath } from "./paths.js";
 
 export interface InitOptions {
   targetRoot: string;

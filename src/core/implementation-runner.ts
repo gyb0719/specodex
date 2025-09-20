@@ -1,6 +1,6 @@
-import { loadTasks } from "./task-loader";
-import { executeTasks } from "./task-runner";
-import type { Logger } from "../cli/types";
+import { loadTasks } from "./task-loader.js";
+import { executeTasks } from "./task-runner.js";
+import type { Logger } from "../cli/types.js";
 
 interface ImplementationOptions {
   projectRoot: string;

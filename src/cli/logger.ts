@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import type { Logger } from "./types";
+import type { Logger } from "./types.js";
 
 export function createLogger(verbose = true): Logger {
   return {

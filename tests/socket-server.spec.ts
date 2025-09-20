@@ -58,8 +58,8 @@ describe("startSocketServer", () => {
     await handle.closed;
 
     const infoMessages = logger.info.mock.calls.map((call) => call[0] as string);
-    const hasMaxConnectionsLog = infoMessages.some((message) =>
-      typeof message === "string" && message.includes("최대 연결 수(1)"),
+    const hasMaxConnectionsLog = infoMessages.some(
+      (message) => typeof message === "string" && message.includes("최대 연결 수(1)"),
     );
     expect(hasMaxConnectionsLog).toBe(true);
   });

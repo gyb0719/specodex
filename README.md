@@ -1,117 +1,112 @@
-
 # SpecoDex
 
 ![CI](https://github.com/ai-code-lab/specodex/actions/workflows/ci.yml/badge.svg)
 
 <p align="center">
-  <img src="docs/assets/specodex-hero.svg" alt="SpecoDex workflow banner" width="720">
+  <img src="docs/assets/specodex-buddy.svg" alt="SpecoDex mascot" width="160">
 </p>
 
-SpecoDex는 Codex 에이전트 전용 명세 중심 워크플로 프레임워크입니다. `/constitution → /specify → /plan → /tasks → /implement`의 5단계와 Playwright MCP 기반 `/research` 단계를 묶어, 팀이 명세와 계획을 신뢰 가능한 핵심 산출물로 유지하도록 돕습니다. 이 저장소는 MIT 라이선스로 배포됩니다.
+SpecoDex는 명세 → 계획 → 작업 → 구현 흐름을 자동화하는 CLI입니다. 초보자도 `specodex` 한 번 설치하면, 기능 아이디어를 헌장/명세/계획/작업 파일로 바꾸고, Codex 에이전트가 일관되게 따라갈 수 있도록 도와줍니다.
 
-## 주요 특징
-- **명세 우선 흐름**: 명세·계획·작업을 CLI 명령으로 강제 실행하고 각 단계 완료 시 다음 명령을 안내합니다.
-- **Playwright 연구 포함**: `specodex research <url>`로 참고 사이트를 조사하고 스크린샷·헤딩·링크를 `memory/research/`에 자동 기록합니다.
-- **템플릿 & 헌장 관리**: `templates/`와 `memory/constitution.md`에 팀 표준을 정의하고 모든 세션에서 재사용합니다.
-- **터미널 친화적 구현 실행**: `specs/<feature>/tasks.yaml`을 위상 정렬 후 순차/병렬 실행하며 dry-run 옵션을 제공합니다.
-- **테스트 및 문서 자동화**: Vitest 테스트, ESLint/Prettier 규칙, AGENTS/Docs 가이드가 포함되어 빠른 온보딩을 돕습니다.
+---
 
-## 필수 요구
-- [Bun](https://bun.sh/) v1.2 이상
-- Node.js 18 이상 (Bun 포함됨)
-- Playwright CLI (`bun x playwright install chromium` 필수)
-- macOS 또는 Linux (Windows는 WSL2 권장)
+## 🚀 5분 만에 시작하기
 
-## 설치
+1. **필수 도구 설치**
+   ```bash
+   # Node 18+은 필수, Bun과 Playwright는 선택/권장
+   brew install node bun # macOS 예시
+   bun x playwright install chromium
+   ```
+2. **SpecoDex 설치 방법을 고르세요**
+   ```bash
+   npm install -g specodex     # 전역 설치
+   # 또는 한번만 실행하고 싶다면
+   npx specodex --help
+   ```
+3. **첫 워크플로 생성**
+   ```bash
+   specodex init demo-app
+   cd demo-app
+   specodex constitution        # 헌장 프롬프트 출력
+   specodex specify demo-app
+   specodex plan demo-app
+   specodex tasks demo-app
+   specodex implement --tasks specs/demo-app/tasks.yaml
+   ```
+   각 명령이 끝나면 다음 단계 안내가 터미널에 출력됩니다.
 
-> **중요**: Playwright 연구 명령이 필수이므로 최초 세팅 시 반드시 브라우저를 설치하세요.
-> ```bash
-> bun install
-> bun x playwright install chromium
-> ```
+---
 
-## 빌드 & 테스트
+## 🤖 SpecoDex 핵심 흐름
+
+| 단계 | 명령                             | 목적                          | Codex에게 넘길 산출물                       |
+| ---- | -------------------------------- | ----------------------------- | ------------------------------------------- |
+| 0    | `specodex init`                  | 템플릿과 샘플, 연구 폴더 생성 | `memory/`, `templates/`, `specs/` 기본 구조 |
+| 1    | `specodex constitution`          | 팀 헌장 초안/적용             | `memory/constitution.md`                    |
+| 2    | `specodex specify <feature>`     | 기능 명세 작성                | `specs/<feature>/spec.md`                   |
+| 3    | `specodex plan <feature>`        | 구현 계획 정리                | `specs/<feature>/plan.md`                   |
+| 4    | `specodex tasks <feature>`       | 작업 그래프 생성              | `specs/<feature>/tasks.yaml`                |
+| 5    | `specodex research <url>`        | 참고 사이트 캡처 + 요약       | `memory/research/<timestamp>.*`             |
+| 6    | `specodex implement --tasks ...` | 작업 순서대로 실행            | 터미널 로그 + 작업 상태                     |
+
+> 실행 중 문제가 생기면 산출물을 다시 Codex에 주고 `/specify` 또는 `/plan`을 갱신하세요.
+
+---
+
+## 🧰 설치 옵션 요약
+
+- **전역 설치**: `npm install -g specodex` 또는 `bun install -g specodex`
+- **프로젝트 로컬 설치**: `npm install specodex --save-dev`
+- **즉시 실행**: `npx specodex --help`
+
+SpecoDex 번들은 순수 ESM이므로 Node 18 이상이면 어디서든 실행됩니다. Bun을 사용하면 `bun specodex ...` 형식으로도 호출할 수 있습니다.
+
+---
+
+## 🔍 개발자용 가이드
+
+### 로컬 작업 명령
+
 ```bash
-# 정적 분석
-bun run lint
-
-# 유닛 & 통합 테스트
-bun x vitest --run --reporter=verbose
-
-# 배포용 번들 생성
-bun run build
+bun install              # 의존성 설치
+bun run lint             # ESLint + Prettier 체크
+bun x vitest run         # 전체 테스트 (watch 비활성)
+bun run build            # dist/ ESM 번들 생산
 ```
 
-## 빠른 시작
-```bash
-# 워크스페이스 초기화
-./src/bin.ts init my-feature
-cd my-feature
-bun install
-bun run install:browsers
+### 디렉터리 구조 미리보기
 
-# 1. 헌장 업데이트
-../src/bin.ts constitution
-# Codex가 생성한 헌장을 --apply로 반영
-../src/bin.ts constitution --apply ./constitution.md
-
-# 2~4. 명세/계획/작업 생성
-../src/bin.ts specify 001-demo [--apply spec.md]
-../src/bin.ts plan 001-demo [--apply plan.md]
-../src/bin.ts tasks 001-demo [--apply tasks.yaml]
-
-# 5. 구현 실행
-../src/bin.ts implement --tasks specs/001-demo/tasks.yaml
-
-# Playwright 연구 (필수 단계 중 하나)
-../src/bin.ts research https://example.com
 ```
-각 단계 실행 후 CLI가 다음 명령을 안내합니다. 실패 시 로그를 참고해 `/specify` 또는 `/plan` 단계로 되돌아가 수정하세요.
-
-## CLI 요약
-| 명령 | 설명 |
-|------|------|
-| `init` | 템플릿·헌장·샘플 명세를 포함한 워크스페이스 초기화 |
-| `constitution` | 헌장 프롬프트 출력 및 Codex 결과 적용 |
-| `specify` | 기능 명세 생성/적용 |
-| `plan` | 구현 계획 생성/적용 |
-| `tasks` | YAML 작업 그래프 생성/적용 |
-| `research` | Playwright MCP로 참고 자료 수집 |
-| `implement` | 작업 그래프 실행 (dry-run 지원) |
-| `socket` | 지정한 포트에서 TCP 소켓 서버 열기 |
-
-## 연구 로그 예시
-```
-memory/research/
- ├── 2025-09-20T03-45-39-076Z.md
- ├── 2025-09-20T03-45-39-076Z.json
- └── 2025-09-20T03-45-39-076Z.png
-```
-- `.md`: 페이지 제목, 헤딩 요약, 주요 링크 목록
-- `.json`: Playwright 메타데이터 (헤딩·링크 배열 등)
-- `.png`: 전체 페이지 스크린샷
-
-### 예제 패키지
-- `docs/examples/meeting-room-demo/`에는 회의실 예약 MVP 사례의 명세·계획·작업 YAML과 Playwright 로그가 포함되어 있어 실제 산출물 구조를 확인할 수 있습니다.
-
-## 디렉터리 구조
-```
-src/
- ├── cli/commands/     # CLI 명령 구현
- ├── core/             # 명세/계획/작업 로직 및 실행 엔진
- └── research/         # Playwright MCP 브리지
-scripts/               # bootstrap & run-playwright 스크립트
-memory/                # 헌장 및 연구 로그 저장소
-templates/             # 명세/계획/작업 템플릿
-specs/                 # 기능별 산출물 (spec/plan/tasks)
-docs/                  # 워크플로 문서, 청사진
+src/                    # TypeScript 소스 (CLI + 파이프라인)
+dist/                   # tsc 결과물 (npm 패키지 발행용)
+templates/              # 명세/계획/작업 템플릿
+memory/                 # 헌장과 연구 로그 저장소
+specs/                  # 실제 기능별 산출물 예시
+scripts/                # Playwright, 부트스트랩 스크립트
 ```
 
-## 기여
-- `AGENTS.md`에서 프로젝트 구조, 스타일, 테스트 가이드를 확인하세요.
-- 작업 전 `/constitution`을 최신 상태로 유지하고, PR에서 명세/계획/작업 변경을 명시하세요.
-- Playwright 조사 결과는 PR 설명이나 연구 로그 링크로 공유해주세요.
-- 릴리스 절차는 `docs/release-checklist.md`를 참고하세요.
+### Playwright 연구 로그
 
-## 라이선스
-MIT License.
+`specodex research <url>`은 다음 파일을 생성합니다.
+
+- `<timestamp>.md`: 제목/헤딩/링크 요약
+- `<timestamp>.json`: 구조화된 메타데이터
+- `<timestamp>.png`: 전체 페이지 스크린샷
+
+---
+
+## 🤝 기여하기
+
+1. 이슈 또는 논의에서 아이디어를 공유하세요.
+2. `specodex init`으로 샌드박스를 생성한 뒤 변경을 테스트합니다.
+3. 변경 전에 `bun x vitest run`으로 회귀 테스트를 돌립니다.
+4. PR에는 목적, 영향받는 경로, 테스트 로그(`bun x vitest run`)를 포함하고 필요한 경우 연구 로그를 첨부하세요.
+
+스타와 피드백은 SpecoDex를 더 나은 명세 도구로 만드는 데 큰 힘이 됩니다!
+
+---
+
+## 📄 라이선스
+
+MIT © SpecoDex Contributors

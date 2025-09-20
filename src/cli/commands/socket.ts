@@ -1,5 +1,5 @@
-import type { Command } from "../types";
-import { startSocketServer } from "../../core/socket-server";
+import type { Command } from "../types.js";
+import { startSocketServer } from "../../core/socket-server.js";
 
 function parseNumberOption(value: unknown, optionName: string): number | undefined {
   if (value === undefined || value === null) {
@@ -41,9 +41,9 @@ export const socketCommand: Command = {
     const handle = await startSocketServer({
       host,
       port,
-      message,
-      durationMs,
-      maxConnections: maxConnectionsValue,
+      ...(message !== undefined ? { message } : {}),
+      ...(durationMs !== undefined ? { durationMs } : {}),
+      ...(maxConnectionsValue !== undefined ? { maxConnections: maxConnectionsValue } : {}),
       logger: context.logger,
     });
 

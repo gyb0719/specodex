@@ -1,6 +1,6 @@
 import { join } from "path";
-import type { Command } from "../types";
-import { preparePlan, updatePlan } from "../../core/plan";
+import type { Command } from "../types.js";
+import { preparePlan, updatePlan } from "../../core/plan.js";
 
 export const planCommand: Command = {
   name: "plan",

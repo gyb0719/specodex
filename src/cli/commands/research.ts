@@ -1,6 +1,6 @@
 import { join } from "path";
-import type { Command } from "../types";
-import { runPlaywrightResearch } from "../../research";
+import type { Command } from "../types.js";
+import { runPlaywrightResearch } from "../../research/index.js";
 
 export const researchCommand: Command = {
   name: "research",

@@ -1,14 +1,14 @@
 import { Command as Commander } from "commander";
-import { constitutionCommand } from "./commands/constitution";
-import { implementCommand } from "./commands/implement";
-import { specifyCommand } from "./commands/specify";
-import { researchCommand } from "./commands/research";
-import { planCommand } from "./commands/plan";
-import { tasksCommand } from "./commands/tasks";
-import { createLogger } from "./logger";
-import type { Command } from "./types";
-import { initCommand } from "./commands/init";
-import { socketCommand } from "./commands/socket";
+import { constitutionCommand } from "./commands/constitution.js";
+import { implementCommand } from "./commands/implement.js";
+import { specifyCommand } from "./commands/specify.js";
+import { researchCommand } from "./commands/research.js";
+import { planCommand } from "./commands/plan.js";
+import { tasksCommand } from "./commands/tasks.js";
+import { createLogger } from "./logger.js";
+import type { Command } from "./types.js";
+import { initCommand } from "./commands/init.js";
+import { socketCommand } from "./commands/socket.js";
 
 const registeredCommands: Command[] = [
   initCommand,

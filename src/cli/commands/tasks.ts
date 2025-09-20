@@ -1,6 +1,6 @@
 import { join } from "path";
-import type { Command } from "../types";
-import { prepareTasks, updateTasks } from "../../core/tasks";
+import type { Command } from "../types.js";
+import { prepareTasks, updateTasks } from "../../core/tasks.js";
 
 export const tasksCommand: Command = {
   name: "tasks",

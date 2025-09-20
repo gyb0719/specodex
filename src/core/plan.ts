@@ -1,7 +1,7 @@
 import { join, relative } from "path";
-import { fileExists, readFile, writeFile } from "./file-utils";
-import { loadPrompt, renderPrompt } from "./prompt";
-import { packagePath } from "./paths";
+import { fileExists, readFile, writeFile } from "./file-utils.js";
+import { loadPrompt, renderPrompt } from "./prompt.js";
+import { packagePath } from "./paths.js";
 
 interface PlanOptions {
   projectRoot: string;

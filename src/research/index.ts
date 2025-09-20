@@ -1,1 +1,1 @@
-export { runPlaywrightResearch } from "./playwright";
+export { runPlaywrightResearch } from "./playwright.js";
