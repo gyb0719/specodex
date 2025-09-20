@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { createConnection } from "net";
+import { createConnection, createServer } from "net";
 import { once } from "events";
 import { startSocketServer } from "../src/core/socket-server";
 import type { Logger } from "../src/cli/types";
@@ -19,8 +19,31 @@ function createTestLogger(): SpyLogger {
   };
 }
 
+async function canBindToLoopback(): Promise<boolean> {
+  return new Promise<boolean>((resolve, reject) => {
+    const server = createServer();
+    const handleError = (error: NodeJS.ErrnoException) => {
+      server.close();
+      if (error.code === "EACCES" || error.code === "EPERM") {
+        resolve(false);
+      } else {
+        reject(error);
+      }
+    };
+    server.once("error", handleError);
+    server.listen(0, "127.0.0.1", () => {
+      server.close();
+      resolve(true);
+    });
+  });
+}
+
+const socketAvailable = await canBindToLoopback();
+
+const runIfSocket = socketAvailable ? it : it.skip;
+
 describe("startSocketServer", () => {
-  it("클라이언트에 메시지를 전송한다", async () => {
+  runIfSocket("클라이언트에 메시지를 전송한다", async () => {
     const logger = createTestLogger();
     const handle = await startSocketServer({
       host: "127.0.0.1",
@@ -43,7 +66,7 @@ describe("startSocketServer", () => {
     await handle.closed;
   });
 
-  it("최대 연결 수에 도달하면 자동으로 종료한다", async () => {
+  runIfSocket("최대 연결 수에 도달하면 자동으로 종료한다", async () => {
     const logger = createTestLogger();
     const handle = await startSocketServer({
       host: "127.0.0.1",

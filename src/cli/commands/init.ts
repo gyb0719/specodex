@@ -2,6 +2,7 @@ import { promises as fs } from "fs";
 import { resolve } from "path";
 import type { Command, Logger } from "../types.js";
 import { scaffoldWorkspace } from "../../core/init.js";
+import { installCodexCommands } from "../../core/codex-install.js";
 
 export const initCommand: Command = {
   name: "init",
@@ -11,13 +12,21 @@ export const initCommand: Command = {
       .argument("[project-name]", "생성할 프로젝트 디렉터리 이름")
       .option("--here", "현재 디렉터리에 초기화")
       .option("--dry-run", "파일을 생성하지 않고 예상 작업만 출력", false)
-      .option("--force", "대상 디렉터리가 비어 있지 않아도 강제로 진행", false);
+      .option("--force", "대상 디렉터리가 비어 있지 않아도 강제로 진행", false)
+      .option("--skip-codex-install", "Codex 슬래시 명령 자동 설치를 건너뜁니다.", false);
   },
   async run(context) {
     const here = Boolean(context.options["here"]);
     const dryRunValue = context.options["dryRun"] ?? context.options["dry-run"];
     const dryRun = Boolean(dryRunValue);
     const force = Boolean(context.options["force"]);
+    const skipCodexInstallOption = Boolean(
+      context.options["skipCodexInstall"] ?? context.options["skip-codex-install"],
+    );
+    const skipCodexInstallEnv =
+      process.env.SPECODEX_SKIP_CODEX_INSTALL === "1" ||
+      process.env.SPECODEX_SKIP_CODEX_INSTALL?.toLowerCase() === "true";
+    const skipCodexInstall = skipCodexInstallOption || skipCodexInstallEnv;
     const projectName = context.args[0] as string | undefined;
 
     if (here && projectName) {
@@ -44,8 +53,33 @@ export const initCommand: Command = {
         "workspace에서 'bun install' 후 'bun run install:browsers'를 실행하는 것을 잊지 마세요.",
       );
     }
+
+    await installCodex({ dryRun, skip: skipCodexInstall, logger: context.logger });
   },
 };
+
+async function installCodex(options: {
+  dryRun: boolean;
+  skip: boolean;
+  logger: Logger;
+}): Promise<void> {
+  const { dryRun, skip, logger } = options;
+
+  if (skip) {
+    logger.info(
+      "Codex 슬래시 명령 자동 설치를 건너뜁니다. 필요하면 'specodex install codex'를 실행하세요.",
+    );
+    return;
+  }
+
+  try {
+    await installCodexCommands({ dryRun, force: false, logger });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    logger.warn(`Codex 슬래시 명령 설치에 실패했습니다: ${message}`);
+    logger.info("필요하면 'specodex install codex --force' 명령으로 재시도하세요.");
+  }
+}
 
 async function ensureTargetDirectory(
   targetRoot: string,

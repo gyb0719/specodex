@@ -9,9 +9,11 @@ import { createLogger } from "./logger.js";
 import type { Command } from "./types.js";
 import { initCommand } from "./commands/init.js";
 import { socketCommand } from "./commands/socket.js";
+import { installCommand } from "./commands/install.js";
 
 const registeredCommands: Command[] = [
   initCommand,
+  installCommand,
   constitutionCommand,
   specifyCommand,
   planCommand,

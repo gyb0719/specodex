@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "bun run src/bin.ts",
     "build": "tsc --project tsconfig.json",
+    "prepare": "tsc --project tsconfig.json",
     "lint": "bun x eslint .",
     "test": "bun x vitest",
     "format": "bun x prettier --check .",

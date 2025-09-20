@@ -4,12 +4,14 @@
 - 루트에는 `README.md`, `AGENTS.md`, 비교 연구용 서브모듈 `spec-kit/`가 있습니다. `spec-kit/`는 참조 전용이므로 수정하지 마세요.
 - `src/`는 Bun 기반 CLI 핵심 코드를 보관합니다. `src/bin.ts`가 진입점이며 `src/cli/commands/`에서 슬래시 명령 로직을, `src/core/`에서 명세 처리 파이프라인을, `src/research/`에서 Playwright MCP 연동을 관리합니다.
 - 템플릿과 거버넌스 아티팩트는 `templates/`와 `memory/`에 위치합니다. 명세·계획·작업 템플릿은 각각 `templates/spec/`, `templates/plan/`, `templates/tasks/`에 배치하고, 조직 헌장은 `memory/constitution.md`로 통합 관리합니다.
+- Codex 슬래시 명령 템플릿은 `templates/commands/`에 있으며, `specodex init` 실행 시 자동으로 `~/.codex/commands/specodex/`에 설치됩니다. 재설치가 필요하면 `specodex install codex`를 사용하세요.
 - 자동화 스크립트는 `scripts/`에 저장하며 POSIX(`*.sh`)와 PowerShell(`*.ps1`) 버전을 쌍으로 유지합니다. 테스트 리소스는 `tests/` 아래 `*.spec.ts` 패턴으로 정리합니다.
 - 실제 명세 예시는 `specs/`에 보관합니다. `specs/example/tasks.yaml`은 구현 예시이며 필요 시 기능별 디렉터리를 추가하세요.
 
 ## SpecoDex CLI 명령 흐름
 - `specodex init [project]` : 프로젝트 구조와 템플릿을 부트스트랩합니다. 완료 후 `/constitution` 안내가 출력됩니다.
 - `specodex constitution` : Codex에 전달할 헌장 프롬프트를 보여주고, `--apply`로 결과를 반영합니다. 완료 시 `/specify` 실행을 안내합니다.
+- `specodex install codex [--force] [--dry-run]` : Codex CLI에 `/constitution`, `/specify` 등 슬래시 명령 템플릿을 재설치합니다. 자동 설치를 건너뛰려면 `specodex init ... --skip-codex-install` 또는 `SPECODEX_SKIP_CODEX_INSTALL=1`을 사용하세요.
 - `specodex specify <feature>` → `specodex plan <feature>` → `specodex tasks <feature>` : 명세·계획·작업을 순차적으로 생성하며 각 단계가 끝날 때마다 다음 명령을 실행하라는 메시지가 출력됩니다.
 - `specodex research <url>` : Playwright MCP 스크립트를 호출해 `memory/research/`에 로그를 남기고, 명세·계획을 업데이트하라고 안내합니다.
 - `specodex implement [--tasks ...] [--dry-run]` : 작업 그래프를 실행하고 검증 후 필요한 단계로 되돌아가라고 안내합니다.

@@ -23,6 +23,8 @@ SpecoDex는 명세 → 계획 → 작업 → 구현 흐름을 자동화하는 CL
    npm install -g specodex     # 전역 설치
    # 또는 한번만 실행하고 싶다면
    npx specodex --help
+   # GitHub 최신 버전을 바로 실행하고 싶다면
+   npx github:ai-code-lab/specodex init demo-app
    ```
 3. **첫 워크플로 생성**
    ```bash
@@ -35,6 +37,7 @@ SpecoDex는 명세 → 계획 → 작업 → 구현 흐름을 자동화하는 CL
    specodex implement --tasks specs/demo-app/tasks.yaml
    ```
    각 명령이 끝나면 다음 단계 안내가 터미널에 출력됩니다.
+   Codex를 사용 중이라면 이 단계에서 슬래시 명령(`/constitution`, `/specify` 등)이 자동으로 설치됩니다.
 
 ---
 
@@ -59,8 +62,23 @@ SpecoDex는 명세 → 계획 → 작업 → 구현 흐름을 자동화하는 CL
 - **전역 설치**: `npm install -g specodex` 또는 `bun install -g specodex`
 - **프로젝트 로컬 설치**: `npm install specodex --save-dev`
 - **즉시 실행**: `npx specodex --help`
+- **GitHub 최신 실행**: `npx github:ai-code-lab/specodex init <project>`
 
 SpecoDex 번들은 순수 ESM이므로 Node 18 이상이면 어디서든 실행됩니다. Bun을 사용하면 `bun specodex ...` 형식으로도 호출할 수 있습니다.
+
+### Codex 슬래시 명령 설치
+
+`specodex init`을 실행하면 Codex CLI용 슬래시 명령 템플릿이 자동으로 `~/.codex/commands/specodex/`에 설치됩니다. 설치를 건너뛰려면 `specodex init ... --skip-codex-install` 또는 환경 변수 `SPECODEX_SKIP_CODEX_INSTALL=1`을 사용하세요.
+
+재설치가 필요할 때는 수동으로 아래 명령을 실행할 수 있습니다.
+
+```bash
+specodex install codex            # ~/.codex/commands/specodex/에 템플릿 복사
+specodex install codex --dry-run  # 실제 복사 없이 경로만 확인
+specodex install codex --force    # 기존 파일을 덮어쓰고 재설치
+```
+
+설치 후 Codex 세션을 재시작하면 새로운 슬래시 명령을 바로 사용할 수 있습니다.
 
 ---
 
