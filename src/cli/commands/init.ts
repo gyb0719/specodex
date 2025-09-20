@@ -24,8 +24,7 @@ export const initCommand: Command = {
       context.options["skipCodexInstall"] ?? context.options["skip-codex-install"],
     );
     const skipEnvValue = process.env["SPECODEX_SKIP_CODEX_INSTALL"];
-    const skipCodexInstallEnv =
-      skipEnvValue === "1" || skipEnvValue?.toLowerCase() === "true";
+    const skipCodexInstallEnv = skipEnvValue === "1" || skipEnvValue?.toLowerCase() === "true";
     const skipCodexInstall = skipCodexInstallOption || skipCodexInstallEnv;
     const projectName = context.args[0] as string | undefined;
 
