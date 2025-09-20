@@ -3,6 +3,10 @@
 
 ![CI](https://github.com/ai-code-lab/specodex/actions/workflows/ci.yml/badge.svg)
 
+<p align="center">
+  <img src="docs/assets/specodex-hero.svg" alt="SpecoDex workflow banner" width="720">
+</p>
+
 SpecoDex는 Codex 에이전트 전용 명세 중심 워크플로 프레임워크입니다. `/constitution → /specify → /plan → /tasks → /implement`의 5단계와 Playwright MCP 기반 `/research` 단계를 묶어, 팀이 명세와 계획을 신뢰 가능한 핵심 산출물로 유지하도록 돕습니다. 이 저장소는 MIT 라이선스로 배포됩니다.
 
 ## 주요 특징
