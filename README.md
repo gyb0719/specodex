@@ -1,4 +1,4 @@
-<img width="1024" height="1024" alt="IMG_4459" src="https://github.com/user-attachments/assets/6c649a98-b3d6-4b33-90c8-594871070df5" />
+
 # SpecoDex
 
 ![CI](https://github.com/ai-code-lab/specodex/actions/workflows/ci.yml/badge.svg)
