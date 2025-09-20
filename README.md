@@ -26,18 +26,26 @@ SpecoDex는 명세 → 계획 → 작업 → 구현 흐름을 자동화하는 CL
    # GitHub 최신 버전을 바로 실행하고 싶다면
    npx github:ai-code-lab/specodex init demo-app
    ```
-3. **첫 워크플로 생성**
+3. **프로젝트 부트스트랩**
    ```bash
-   specodex init demo-app
-   cd demo-app
-   specodex constitution        # 헌장 프롬프트 출력
-   specodex specify demo-app
-   specodex plan demo-app
-   specodex tasks demo-app
-   specodex implement --tasks specs/demo-app/tasks.yaml
+   npx github:ai-code-lab/specodex init demo-app
    ```
-   각 명령이 끝나면 다음 단계 안내가 터미널에 출력됩니다.
-   Codex를 사용 중이라면 이 단계에서 슬래시 명령(`/constitution`, `/specify` 등)이 자동으로 설치됩니다.
+   위 명령 한 번이면 다음이 자동으로 진행됩니다.
+   - `demo-app/` 디렉터리에 템플릿과 샘플 아티팩트 생성
+   - Codex 슬래시 명령 템플릿(`/.codex/commands/specodex/`) 동기화
+   - 의존성 설치 (`bun install` → 실패 시 `npm install`)
+
+4. **Codex에서 워크플로 계속**
+   Codex 세션을 `demo-app` 루트에서 시작하면 곧바로 `/constitution`, `/specify`, `/plan`, `/tasks`, `/implement` 슬래시 명령을 사용할 수 있습니다. 각 명령은 헌장 작성 → 명세 → 계획 → 작업 → 구현까지 순차적으로 안내합니다.
+
+> CLI에서 수동으로 각 단계를 실행하고 싶다면 다음 명령을 순서대로 사용할 수 있습니다.
+> ```bash
+> specodex constitution
+> specodex specify <feature>
+> specodex plan <feature>
+> specodex tasks <feature>
+> specodex implement --tasks specs/<feature>/tasks.yaml
+> ```
 
 ---
 
