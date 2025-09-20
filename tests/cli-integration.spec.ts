@@ -38,7 +38,11 @@ describe("SpecoDex CLI", () => {
   });
 
   it("init --dry-run은 생성 작업을 출력한다", () => {
-    const env = { ...process.env, SPECODEX_SKIP_CODEX_INSTALL: "1" };
+    const env = {
+      ...process.env,
+      SPECODEX_SKIP_CODEX_INSTALL: "1",
+      SPECODEX_SKIP_AUTO_INSTALL: "1",
+    };
     const result = runCli(["init", "demo", "--dry-run"], PROJECT_ROOT, env);
     expect(result.status).toBe(0);
     expect(result.stdout).toContain("[dry-run] 디렉터리 생성: memory");
@@ -46,7 +50,11 @@ describe("SpecoDex CLI", () => {
 
   it("init --here는 기본 구조를 실제로 생성한다", () => {
     const tempRoot = mkdtempSync(join(tmpdir(), "specodex-cli-"));
-    const env = { ...process.env, SPECODEX_SKIP_CODEX_INSTALL: "1" };
+    const env = {
+      ...process.env,
+      SPECODEX_SKIP_CODEX_INSTALL: "1",
+      SPECODEX_SKIP_AUTO_INSTALL: "1",
+    };
     const result = runCli(["init", "--here"], tempRoot, env);
     expect(result.status).toBe(0);
     const constitutionPath = join(tempRoot, "memory", "constitution.md");

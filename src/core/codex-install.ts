@@ -100,10 +100,12 @@ async function exists(path: string): Promise<boolean> {
   }
 }
 
-export async function ensureCodexCommandsInstalled(options: {
+export interface CodexSyncOptions {
   logger: Logger;
   quiet?: boolean;
-}): Promise<void> {
+}
+
+export async function ensureCodexCommandsInstalled(options: CodexSyncOptions): Promise<void> {
   const { logger, quiet = false } = options;
   const homeDir = os.homedir();
 

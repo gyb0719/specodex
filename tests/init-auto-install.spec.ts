@@ -8,6 +8,7 @@ import type { Logger } from "../src/cli/types";
 import { rm } from "fs/promises";
 
 const installSpy = vi.spyOn(codexInstall, "installCodexCommands");
+const originalAutoInstall = process.env.SPECODEX_SKIP_AUTO_INSTALL;
 
 function createLogger(): Logger {
   return {
@@ -20,10 +21,12 @@ function createLogger(): Logger {
 describe("initCommand Codex 설치", () => {
   beforeEach(() => {
     installSpy.mockClear();
+    process.env.SPECODEX_SKIP_AUTO_INSTALL = "1";
   });
 
   afterEach(async () => {
     delete process.env.SPECODEX_SKIP_CODEX_INSTALL;
+    process.env.SPECODEX_SKIP_AUTO_INSTALL = originalAutoInstall;
   });
 
   it("기본적으로 Codex 명령 설치를 실행한다", async () => {

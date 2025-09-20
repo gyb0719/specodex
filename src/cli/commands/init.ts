@@ -3,6 +3,7 @@ import { resolve } from "path";
 import type { Command, Logger } from "../types.js";
 import { scaffoldWorkspace } from "../../core/init.js";
 import { installCodexCommands } from "../../core/codex-install.js";
+import { installProjectDependencies } from "../../core/dependency-install.js";
 
 export const initCommand: Command = {
   name: "init",
@@ -13,7 +14,8 @@ export const initCommand: Command = {
       .option("--here", "현재 디렉터리에 초기화")
       .option("--dry-run", "파일을 생성하지 않고 예상 작업만 출력", false)
       .option("--force", "대상 디렉터리가 비어 있지 않아도 강제로 진행", false)
-      .option("--skip-codex-install", "Codex 슬래시 명령 자동 설치를 건너뜁니다.", false);
+      .option("--skip-codex-install", "Codex 슬래시 명령 자동 설치를 건너뜁니다.", false)
+      .option("--skip-install", "의존성 자동 설치를 건너뜁니다.", false);
   },
   async run(context) {
     const here = Boolean(context.options["here"]);
@@ -26,6 +28,12 @@ export const initCommand: Command = {
     const skipEnvValue = process.env["SPECODEX_SKIP_CODEX_INSTALL"];
     const skipCodexInstallEnv = skipEnvValue === "1" || skipEnvValue?.toLowerCase() === "true";
     const skipCodexInstall = skipCodexInstallOption || skipCodexInstallEnv;
+    const skipInstallOption = Boolean(
+      context.options["skipInstall"] ?? context.options["skip-install"],
+    );
+    const skipInstallEnv = process.env["SPECODEX_SKIP_AUTO_INSTALL"];
+    const skipDependencies =
+      skipInstallOption || skipInstallEnv === "1" || skipInstallEnv?.toLowerCase() === "true";
     const projectName = context.args[0] as string | undefined;
 
     if (here && projectName) {
@@ -54,6 +62,12 @@ export const initCommand: Command = {
     }
 
     await installCodex({ dryRun, skip: skipCodexInstall, logger: context.logger });
+    await installProjectDependencies({
+      projectRoot: targetRoot,
+      dryRun,
+      skip: skipDependencies,
+      logger: context.logger,
+    });
   },
 };
 
