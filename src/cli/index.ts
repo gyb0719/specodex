@@ -10,6 +10,7 @@ import type { Command } from "./types.js";
 import { initCommand } from "./commands/init.js";
 import { socketCommand } from "./commands/socket.js";
 import { installCommand } from "./commands/install.js";
+import { ensureCodexCommandsInstalled } from "../core/codex-install.js";
 
 const registeredCommands: Command[] = [
   initCommand,
@@ -37,6 +38,13 @@ export function buildCli(): Commander {
       const commandInstance = cliArgs[cliArgs.length - 1] as Commander;
       const logger = createLogger();
       try {
+        if (shouldAutoInstallCodexCommands(command.name)) {
+          const skipEnvValue = process.env["SPECODEX_SKIP_CODEX_INSTALL"];
+          const skipAuto = skipEnvValue === "1" || skipEnvValue?.toLowerCase() === "true";
+          if (!skipAuto) {
+            await ensureCodexCommandsInstalled({ logger, quiet: true });
+          }
+        }
         await command.run({
           projectRoot: process.cwd(),
           args: process.argv.slice(3),
@@ -56,4 +64,8 @@ export function buildCli(): Commander {
 
 export function listCommands(): Command[] {
   return [...registeredCommands];
+}
+
+function shouldAutoInstallCodexCommands(commandName: string): boolean {
+  return commandName !== "install" && commandName !== "init";
 }

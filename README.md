@@ -78,7 +78,7 @@ specodex install codex --dry-run  # 실제 복사 없이 경로만 확인
 specodex install codex --force    # 기존 파일을 덮어쓰고 재설치
 ```
 
-설치 후 Codex 세션을 재시작하면 새로운 슬래시 명령을 바로 사용할 수 있습니다.
+저장소 의존성을 `bun install` 또는 `npm install`로 설치하면 `postinstall` 훅이 자동으로 실행되어 템플릿을 최신 상태로 동기화합니다. 설치 후 Codex 세션을 재시작하면 새로운 슬래시 명령을 바로 사용할 수 있습니다. 자동 동기화를 건너뛰려면 환경 변수 `SPECODEX_SKIP_CODEX_INSTALL=1`을 설정하세요.
 
 ---
 

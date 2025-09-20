@@ -8,12 +8,13 @@ interface InstallOptions {
   dryRun: boolean;
   force: boolean;
   logger: Logger;
+  quiet?: boolean;
 }
 
 const TEMPLATE_DIR = "templates/commands";
 
 export async function installCodexCommands(options: InstallOptions): Promise<void> {
-  const { dryRun, force, logger } = options;
+  const { dryRun, force, logger, quiet = false } = options;
   const homeDir = os.homedir();
 
   if (!homeDir) {
@@ -25,10 +26,14 @@ export async function installCodexCommands(options: InstallOptions): Promise<voi
   const sourceDir = packagePath(TEMPLATE_DIR);
 
   if (dryRun) {
-    logger.info(`[dry-run] Codex 명령 설치 경로: ${commandsRoot}`);
+    if (!quiet) {
+      logger.info(`[dry-run] Codex 명령 설치 경로: ${commandsRoot}`);
+    }
   } else {
     await fs.mkdir(commandsRoot, { recursive: true });
-    logger.info(`설치 경로: ${commandsRoot}`);
+    if (!quiet) {
+      logger.info(`설치 경로: ${commandsRoot}`);
+    }
   }
 
   const entries = await fs.readdir(sourceDir, { withFileTypes: true });
@@ -48,16 +53,22 @@ export async function installCodexCommands(options: InstallOptions): Promise<voi
     const displayName = relative(commandsRoot, destPath) || file;
 
     if (dryRun) {
-      logger.info(`[dry-run] ${displayName} ← ${relative(process.cwd(), sourcePath)}`);
-      if (!force && (await exists(destPath))) {
-        logger.warn(`[dry-run] ${displayName}가 이미 존재합니다. --force 없이 실행 시 건너뜁니다.`);
+      if (!quiet) {
+        logger.info(`[dry-run] ${displayName} ← ${relative(process.cwd(), sourcePath)}`);
+        if (!force && (await exists(destPath))) {
+          logger.warn(
+            `[dry-run] ${displayName}가 이미 존재합니다. --force 없이 실행 시 건너뜁니다.`,
+          );
+        }
       }
       continue;
     }
 
     const alreadyExists = await exists(destPath);
     if (alreadyExists && !force) {
-      logger.warn(`${displayName}가 이미 있어 건너뜁니다. 덮어쓰려면 --force 옵션을 사용하세요.`);
+      if (!quiet) {
+        logger.warn(`${displayName}가 이미 있어 건너뜁니다. 덮어쓰려면 --force 옵션을 사용하세요.`);
+      }
       continue;
     }
 
@@ -65,12 +76,14 @@ export async function installCodexCommands(options: InstallOptions): Promise<voi
     await fs.mkdir(dirname(destPath), { recursive: true });
     await fs.writeFile(destPath, data);
 
-    logger.info(
-      alreadyExists ? `${displayName}를 덮어썼습니다.` : `${displayName}을(를) 설치했습니다.`,
-    );
+    if (!quiet) {
+      logger.info(
+        alreadyExists ? `${displayName}를 덮어썼습니다.` : `${displayName}을(를) 설치했습니다.`,
+      );
+    }
   }
 
-  if (!dryRun) {
+  if (!dryRun && !quiet) {
     logger.info("Codex를 재시작하면 /constitution, /specify 등 명령이 나타납니다.");
   }
 }
@@ -84,5 +97,69 @@ async function exists(path: string): Promise<boolean> {
       return false;
     }
     throw error;
+  }
+}
+
+export async function ensureCodexCommandsInstalled(options: {
+  logger: Logger;
+  quiet?: boolean;
+}): Promise<void> {
+  const { logger, quiet = false } = options;
+  const homeDir = os.homedir();
+
+  if (!homeDir) {
+    if (!quiet) {
+      logger.warn("홈 디렉터리를 확인할 수 없어 Codex 명령 설치를 건너뜁니다.");
+    }
+    return;
+  }
+
+  const commandsRoot = join(homeDir, ".codex", "commands", "specodex");
+  const sourceDir = packagePath(TEMPLATE_DIR);
+
+  let needsInstall = false;
+
+  try {
+    const entries = await fs.readdir(sourceDir, { withFileTypes: true });
+    for (const entry of entries) {
+      if (!entry.isFile() || !entry.name.endsWith(".md")) {
+        continue;
+      }
+      const sourcePath = join(sourceDir, entry.name);
+      const destPath = join(commandsRoot, entry.name);
+      const sourceData = await fs.readFile(sourcePath, "utf-8");
+      let destData: string | null = null;
+      try {
+        destData = await fs.readFile(destPath, "utf-8");
+      } catch (error) {
+        if ((error as NodeJS.ErrnoException).code !== "ENOENT") {
+          throw error;
+        }
+      }
+
+      if (destData === null || destData !== sourceData) {
+        needsInstall = true;
+        break;
+      }
+    }
+  } catch (error) {
+    if (!quiet) {
+      const message = error instanceof Error ? error.message : String(error);
+      logger.warn(`Codex 명령 상태 확인 중 오류가 발생했습니다: ${message}`);
+    }
+    return;
+  }
+
+  if (!needsInstall) {
+    return;
+  }
+
+  try {
+    await installCodexCommands({ dryRun: false, force: true, logger, quiet });
+  } catch (error) {
+    if (!quiet) {
+      const message = error instanceof Error ? error.message : String(error);
+      logger.warn(`Codex 명령 자동 설치에 실패했습니다: ${message}`);
+    }
   }
 }

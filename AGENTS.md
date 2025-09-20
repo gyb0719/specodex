@@ -4,7 +4,7 @@
 - 루트에는 `README.md`, `AGENTS.md`, 비교 연구용 서브모듈 `spec-kit/`가 있습니다. `spec-kit/`는 참조 전용이므로 수정하지 마세요.
 - `src/`는 Bun 기반 CLI 핵심 코드를 보관합니다. `src/bin.ts`가 진입점이며 `src/cli/commands/`에서 슬래시 명령 로직을, `src/core/`에서 명세 처리 파이프라인을, `src/research/`에서 Playwright MCP 연동을 관리합니다.
 - 템플릿과 거버넌스 아티팩트는 `templates/`와 `memory/`에 위치합니다. 명세·계획·작업 템플릿은 각각 `templates/spec/`, `templates/plan/`, `templates/tasks/`에 배치하고, 조직 헌장은 `memory/constitution.md`로 통합 관리합니다.
-- Codex 슬래시 명령 템플릿은 `templates/commands/`에 있으며, `specodex init` 실행 시 자동으로 `~/.codex/commands/specodex/`에 설치됩니다. 재설치가 필요하면 `specodex install codex`를 사용하세요.
+- Codex 슬래시 명령 템플릿은 `templates/commands/`에 있으며, `bun install`/`npm install` 또는 `specodex init` 실행 시 자동으로 `~/.codex/commands/specodex/`에 설치됩니다. 재설치가 필요하면 `specodex install codex`를 사용하세요.
 - 자동화 스크립트는 `scripts/`에 저장하며 POSIX(`*.sh`)와 PowerShell(`*.ps1`) 버전을 쌍으로 유지합니다. 테스트 리소스는 `tests/` 아래 `*.spec.ts` 패턴으로 정리합니다.
 - 실제 명세 예시는 `specs/`에 보관합니다. `specs/example/tasks.yaml`은 구현 예시이며 필요 시 기능별 디렉터리를 추가하세요.
 

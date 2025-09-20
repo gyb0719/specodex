@@ -3,7 +3,7 @@ import { promises as fs } from "fs";
 import os from "os";
 import { join } from "path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { installCodexCommands } from "../src/core/codex-install";
+import { ensureCodexCommandsInstalled, installCodexCommands } from "../src/core/codex-install";
 import { packagePath } from "../src/core/paths";
 
 const logger = {
@@ -75,5 +75,43 @@ describe("installCodexCommands", () => {
       );
 
     expect(exists).toBe(false);
+  });
+
+  it("ensureCodexCommandsInstalled writes missing files", async () => {
+    const logger = {
+      info: vi.fn(),
+      warn: vi.fn(),
+      error: vi.fn(),
+    };
+
+    await ensureCodexCommandsInstalled({ logger, quiet: true });
+
+    const expectedFiles = await listTemplateFiles();
+    const destDir = join(tempHome, ".codex", "commands", "specodex");
+    const actualFiles = await fs.readdir(destDir);
+
+    expect(actualFiles.sort()).toEqual(expectedFiles);
+  });
+
+  it("ensureCodexCommandsInstalled updates outdated files", async () => {
+    const logger = {
+      info: vi.fn(),
+      warn: vi.fn(),
+      error: vi.fn(),
+    };
+
+    await installCodexCommands({ dryRun: false, force: true, logger });
+
+    const destDir = join(tempHome, ".codex", "commands", "specodex");
+    const targetFile = join(destDir, "plan.md");
+    await fs.writeFile(targetFile, "outdated", "utf-8");
+
+    await ensureCodexCommandsInstalled({ logger, quiet: true });
+
+    const templatePath = join(packagePath("templates/commands"), "plan.md");
+    const templateContent = await fs.readFile(templatePath, "utf-8");
+    const content = await fs.readFile(targetFile, "utf-8");
+
+    expect(content).toBe(templateContent);
   });
 });
