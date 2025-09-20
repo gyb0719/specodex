@@ -1,0 +1,14 @@
+- id: TASK-001
+  title: 환경 확인
+  steps:
+    - echo "checking environment"
+- id: TASK-002
+  title: 스키마 초안 작성
+  depends_on: [TASK-001]
+  steps:
+    - echo "writing schema"
+- id: TASK-003
+  title: 단위 테스트 실행
+  depends_on: [TASK-002]
+  steps:
+    - echo "running unit tests"

@@ -1,0 +1,14 @@
+- id: TASK-001
+  title: 기본 의존성 설치 확인
+  steps:
+    - bun install
+- id: TASK-002
+  title: ESLint 검사 실행
+  depends_on: [TASK-001]
+  steps:
+    - bun run lint
+- id: TASK-003
+  title: 테스트 실행
+  depends_on: [TASK-001]
+  steps:
+    - bun run test

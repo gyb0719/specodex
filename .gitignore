@@ -1,0 +1,9 @@
+node_modules
+bun.lockb
+dist
+/spec-kit
+.env
+.DS_Store
+.vscode
+.idea
+coverage

@@ -1,0 +1,52 @@
+{
+  "name": "specodex",
+  "version": "0.1.0",
+  "description": "SpecoDex CLI and templates for spec-driven development with Codex agents.",
+  "type": "module",
+  "bin": {
+    "specodex": "./dist/bin.js"
+  },
+  "scripts": {
+    "dev": "bun run src/bin.ts",
+    "build": "tsc --project tsconfig.json",
+    "lint": "bun x eslint .",
+    "test": "bun x vitest",
+    "format": "bun x prettier --check .",
+    "format:write": "bun x prettier --write ."
+  },
+  "keywords": [
+    "spec",
+    "cli",
+    "codex"
+  ],
+  "author": "SpecoDex Contributors",
+  "license": "MIT",
+  "devDependencies": {
+    "@eslint/js": "^9.9.0",
+    "@playwright/test": "^1.55.0",
+    "@tsconfig/strictest": "^2.0.3",
+    "@types/node": "^22.5.4",
+    "@types/yaml": "^1.9.7",
+    "esbuild": "0.23.0",
+    "eslint": "^9.9.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "prettier": "^3.3.3",
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.4.0",
+    "vitest": "2.1.3"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^12.0.0",
+    "yaml": "^2.5.0"
+  },
+  "homepage": "https://github.com/ai-code-lab/specodex#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ai-code-lab/specodex.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ai-code-lab/specodex/issues"
+  }
+}

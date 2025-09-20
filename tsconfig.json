@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "@tsconfig/strictest/tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "target": "ES2022",
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+    "rootDir": "src",
+    "types": ["node"],
+    "noEmit": false
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["spec-kit", "dist", "node_modules"]
+}

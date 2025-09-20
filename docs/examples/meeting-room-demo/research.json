@@ -1,0 +1,18 @@
+{
+  "url": "https://example.com",
+  "capturedAt": "2025-09-20T03:45:41.393Z",
+  "title": "Example Domain",
+  "headings": [
+    {
+      "tag": "h1",
+      "text": "Example Domain"
+    }
+  ],
+  "links": [
+    {
+      "text": "More information...",
+      "href": "https://www.iana.org/domains/example"
+    }
+  ],
+  "screenshotFile": "2025-09-20T03-45-39-076Z.png"
+}

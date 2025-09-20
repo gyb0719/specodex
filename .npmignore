@@ -1,0 +1,8 @@
+src/
+tests/
+docs/
+.specodex-cache
+memory/
+spec-kit/
+*.log
+*.tsbuildinfo
