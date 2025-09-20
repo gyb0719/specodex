@@ -8,6 +8,7 @@ import { tasksCommand } from "./commands/tasks";
 import { createLogger } from "./logger";
 import type { Command } from "./types";
 import { initCommand } from "./commands/init";
+import { socketCommand } from "./commands/socket";
 
 const registeredCommands: Command[] = [
   initCommand,
@@ -17,6 +18,7 @@ const registeredCommands: Command[] = [
   tasksCommand,
   researchCommand,
   implementCommand,
+  socketCommand,
 ];
 
 export function buildCli(): Commander {

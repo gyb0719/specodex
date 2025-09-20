@@ -74,6 +74,7 @@ bun run install:browsers
 | `tasks` | YAML 작업 그래프 생성/적용 |
 | `research` | Playwright MCP로 참고 자료 수집 |
 | `implement` | 작업 그래프 실행 (dry-run 지원) |
+| `socket` | 지정한 포트에서 TCP 소켓 서버 열기 |
 
 ## 연구 로그 예시
 ```
