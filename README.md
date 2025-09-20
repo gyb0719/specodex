@@ -1,7 +1,5 @@
 # SpecoDex
 
-!(https://github.com/ai-code-lab/specodex/actions/workflows/ci.yml/badge.svg)
-
 <p align="center">
   <img src="docs/assets/specodex-buddy.svg" alt="SpecoDex mascot" width="160">
 </p>
